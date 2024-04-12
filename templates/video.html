@@ -3,7 +3,7 @@
     darker-dark-theme-deprecate dark system-icons typography typography-spacing>
 
 <head>
-    <title>TAKE FROM Video title</title>
+    <title>{{ video['title'] }}</title>
     <link rel="stylesheet" crossorigin="" href="{{ url_for('static', path='css/video.css') }}">
     <link rel="icon" href="{{ url_for('media', path='favicon.ico') }}">
     <style class="global_styles" nonce="PDlLoFlb11wW_6HAAO0HIA">
@@ -66,11 +66,11 @@
             <div id="home-container-media">
                 <div class="rich-grid-media-skeleton" style="flex-basis: 310px;">
                     <div class="video-details">
-                        <video controls poster="/media/preview.jpg">
-                            <source src="http://127.0.0.1:8000/api/video/1" type="video/mp4" />
+                        <video controls poster="/media/videos/{{ video['image_path'] }}">
+                            <source src="http://127.0.0.1:8000/api/video/{{ video['_id'] }}" type="video/mp4" />
                         </video>
                         <div class="details" style="margin: 15px 0px;font-size: 2.25rem;font-weight: 600;overflow: hidden;text-overflow: ellipsis;white-space: normal;color: white;">
-                            7 Days Stranded On An Island
+                            {{ video['title'] }}
                         </div>
                     </div>
                 </div>

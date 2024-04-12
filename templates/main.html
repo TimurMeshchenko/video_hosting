@@ -53,15 +53,19 @@
     <div id="home-page-skeleton">
         <div id="home-container-skeleton">
             <div id="home-container-media">
+                {% for video in videos %}
                 <div class="rich-grid-media-skeleton" style="flex-basis: 310px;">
                     <div class="video-details">
-                        <img src="/media/preview.jpg">
-                        <div class="details"
-                            style="margin: 15px 0px;font-size: 1.9rem;font-weight: 600;overflow: hidden;text-overflow: ellipsis;white-space: normal;color: white;">
-                            7 Days Stranded On An Island
-                        </div>
+                        <a href="/video/{{ video['_id'] }}" style="display: flex;flex-direction: column;">
+                            <img src="/media/videos/{{ video['image_path'] }}">
+                        </a>
+                        <a class="details" href="/video/{{ video['_id'] }}"
+                            style="margin: 15px 0px;font-size: 1.9rem;font-weight: 600;overflow: hidden;text-overflow: ellipsis;white-space: normal;color: white;cursor: pointer;text-decoration: none;">
+                            {{ video['title'] }}
+                        </a>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>

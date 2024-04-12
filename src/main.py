@@ -5,6 +5,9 @@ from fastapi.templating import Jinja2Templates
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
+from pathlib import Path
+from typing import IO, Generator
+from fastapi.responses import StreamingResponse
 
 app = FastAPI()
 
@@ -28,40 +31,28 @@ class MongoDBConnection:
         self.client.close()
 
 @app.get("/")
-async def main(request: Request):        
-    context = {"request": request}
-    return templates.TemplateResponse("main.html", context)
+async def main(request: Request):
+    async with MongoDBConnection(mongo_uri) as client:
+        db = client.get_database("video_hosting")
+        videos_collection = db.get_collection("videos")
+        videos = []
+        cursor = videos_collection.find()
+        async for video in cursor:
+            videos.append(video)               
+        context = {"request": request, "videos": videos}
+        return templates.TemplateResponse("main.html", context)
 
-@app.get("/video")
-async def video(request: Request):        
-    context = {"request": request}
-    return templates.TemplateResponse("video.html", context)
-
-from pathlib import Path
-from fastapi import Response
-from fastapi import Header
-from typing import IO, Generator
-from fastapi.responses import StreamingResponse
-
-# @app.get("/api/video")
-# async def video(request: Request, range: str = Header(None)):    
-#     CHUNK_SIZE = 1024*1024
-#     video_path = Path(__file__).parent / "media/1.mp4"
-#     start, end = range.replace("bytes=", "").split("-")
-#     start = int(start)
-#     end = int(end) if end else start + CHUNK_SIZE
-#     with open(video_path, "rb") as video:
-#         video.seek(start)
-#         data = video.read(end - start)
-#         filesize = str(video_path.stat().st_size)
-#         headers = {
-#             'Content-Range': f'bytes {str(start)}-{str(end)}/{filesize}',
-#             'Accept-Ranges': 'bytes'
-#         }
-#         return Response(data, status_code=206, headers=headers, media_type="video/mp4")
+@app.get("/video/{video_id}")
+async def video(request: Request, video_id: str):  
+    async with MongoDBConnection(mongo_uri) as client:
+        db = client.get_database("video_hosting")
+        videos_collection = db.get_collection("videos")
+        video = await videos_collection.find_one({"_id": ObjectId(video_id)})       
+        context = {"request": request, "video": video}
+        return templates.TemplateResponse("video.html", context)
 
 @app.get("/api/video/{video_id}")
-async def get_streaming_video(request: Request, video_id: int) -> StreamingResponse:
+async def get_streaming_video(request: Request, video_id: str) -> StreamingResponse:
     file, status_code, content_length, headers = await open_file(request, video_id)
     response = StreamingResponse(
         file,
@@ -77,12 +68,13 @@ async def get_streaming_video(request: Request, video_id: int) -> StreamingRespo
     return response
 
 
-async def open_file(request: Request, video_id: int) -> tuple:
-    # video = await Video.objects.get(id=video_id)
-    # path = Path(video.path)
-    # path = Path(__file__).parent / "media/1.mp4"
-    path = Path(__file__).parent / "media/1_1048576.mp4"
-
+async def open_file(request: Request, video_id: str) -> tuple:
+    async with MongoDBConnection(mongo_uri) as client:
+        db = client.get_database("video_hosting")
+        videos_collection = db.get_collection("videos")
+        video = await videos_collection.find_one({"_id": ObjectId(video_id)})  
+ 
+    path = Path(__file__).parent / f"media/videos/{video['file_path']}"
     file = path.open('rb')
     file_size = path.stat().st_size
     content_length = file_size
@@ -104,10 +96,10 @@ async def open_file(request: Request, video_id: int) -> tuple:
     return file, status_code, content_length, headers
 
 def ranged(
-        file: IO[bytes],
-        start: int = 0,
-        end: int = None,
-        block_size: int = 8192,
+    file: IO[bytes],
+    start: int = 0,
+    end: int = None,
+    block_size: int = 8192,
 ) -> Generator[bytes, None, None]:
     consumed = 0
     file.seek(start)
