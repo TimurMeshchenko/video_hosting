@@ -1,6 +1,6 @@
 # video_hosting
 
-# создание бд
+# Настройка mongodb
 
 mongosh 
 use video_hosting
@@ -11,8 +11,10 @@ mongorestore --db=video_hosting .
 
 # Запуск
 
-poetry run python -m uvicorn main:app --reload
-sudo poetry run ./reload.sh
+sudo poetry install
+cd src
+sudo poetry run python -m uvicorn main:app --reload
+sudo poetry run ./run_with_reload.sh
 
 
 # mongosh комманды
