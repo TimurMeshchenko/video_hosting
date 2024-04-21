@@ -15,8 +15,8 @@ load_dotenv()
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory=f"static"), name="static")
-app.mount("/media", StaticFiles(directory=f"media"), name="media")
+app.mount("/video_hosting/static", StaticFiles(directory=f"static"), name="static")
+app.mount("/video_hosting/media", StaticFiles(directory=f"media"), name="media")
 
 templates = Jinja2Templates(directory="../templates")
 
@@ -34,7 +34,7 @@ class MongoDBConnection:
     async def __aexit__(self, *args):
         self.client.close()
 
-@app.get("/")
+@app.get("/video_hosting")
 async def main(request: Request):
     async with MongoDBConnection(mongo_uri) as client:
         db = client.get_database("video_hosting")
@@ -46,7 +46,7 @@ async def main(request: Request):
         context = {"request": request, "videos": videos}
         return templates.TemplateResponse("main.html", context)
 
-@app.get("/video/{video_id}")
+@app.get("/video_hosting/video/{video_id}")
 async def video(request: Request, video_id: str):  
     async with MongoDBConnection(mongo_uri) as client:
         db = client.get_database("video_hosting")
@@ -55,7 +55,7 @@ async def video(request: Request, video_id: str):
         context = {"request": request, "video": video}
         return templates.TemplateResponse("video.html", context)
 
-@app.get("/api/video/{video_id}")
+@app.get("/video_hosting/api/video/{video_id}")
 async def get_streaming_video(request: Request, video_id: str) -> StreamingResponse:
     file, status_code, content_length, headers = await open_file(request, video_id)
     response = StreamingResponse(

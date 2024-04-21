@@ -50,8 +50,8 @@
 
 <body dir="ltr">
     <header style="padding: 8px 0px 0px 32px;">
-        <a href="/">
-            <img src="/media/favicon.ico" style="width: 45px;height: 50px;">
+        <a href="/video_hosting">
+            <img src="{{ url_for('media', path='favicon.ico') }}" style="width: 45px;height: 50px;">
         </a>
     </header>
     <div id="home-page-skeleton">
@@ -59,8 +59,8 @@
             <div id="home-container-media">
                 <div class="rich-grid-media-skeleton" style="flex-basis: 310px;">
                     <div class="video-details">
-                        <video controls poster="/media/videos/{{ video['image_path'] }}">
-                            <source src="/api/video/{{ video['_id'] }}" type="video/mp4" />
+                        <video controls poster="{{ url_for('media', path='videos') }}/{{ video['image_path'] }}">
+                            <source src="/video_hosting/api/video/{{ video['_id'] }}" type="video/mp4" />
                         </video>
                         <div class="details" style="margin: 15px 0px;font-size: 2.25rem;font-weight: 600;overflow: hidden;text-overflow: ellipsis;white-space: normal;color: white;">
                             {{ video['title'] }}

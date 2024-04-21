@@ -55,10 +55,10 @@
                 {% for video in videos %}
                 <div class="rich-grid-media-skeleton" style="flex-basis: 310px;">
                     <div class="video-details">
-                        <a href="/video/{{ video['_id'] }}" style="display: flex;flex-direction: column;">
-                            <img src="/media/videos/{{ video['image_path'] }}">
+                        <a href="/video_hosting/video/{{ video['_id'] }}" style="display: flex;flex-direction: column;">
+                            <img src="{{ url_for('media', path='videos') }}/{{ video['image_path'] }}">
                         </a>
-                        <a class="details" href="/video/{{ video['_id'] }}"
+                        <a class="details" href="/video_hosting/video/{{ video['_id'] }}"
                             style="margin: 15px 0px;font-size: 1.9rem;font-weight: 600;overflow: hidden;text-overflow: ellipsis;white-space: normal;color: white;cursor: pointer;text-decoration: none;">
                             {{ video['title'] }}
                         </a>
