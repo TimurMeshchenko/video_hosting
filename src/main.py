@@ -8,6 +8,10 @@ from bson import ObjectId
 from pathlib import Path
 from typing import IO, Generator
 from fastapi.responses import StreamingResponse
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -16,7 +20,7 @@ app.mount("/media", StaticFiles(directory=f"media"), name="media")
 
 templates = Jinja2Templates(directory="../templates")
 
-mongo_uri = "mongodb://localhost:27017"
+mongo_uri = f'mongodb://{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}'
 
 class MongoDBConnection:
     def __init__(self, mongo_uri):
