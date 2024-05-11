@@ -11,6 +11,6 @@ restart_gunicorn() {
 uvicorn main:app --port 8004 &
 
 # Watch for changes in the project directory and restart Gunicorn when necessary
-while inotifywait -r -e modify,move,create,delete /home/deb/Python/pet_projects/video_hosting; do 
+while inotifywait -r -e modify,move,create,delete /python/pet_projects/video_hosting; do 
     restart_gunicorn
 done

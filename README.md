@@ -11,10 +11,10 @@ mongorestore --db=video_hosting .
 
 # Запуск
 
-sudo poetry install
+poetry install
 cd src
-sudo poetry run python -m uvicorn main:app --reload --port 8004
-sudo poetry run ./run_with_reload.sh
+poetry run python -m uvicorn main:app --reload --port 8004
+poetry run ./run_with_reload.sh
 
 
 # mongosh комманды
