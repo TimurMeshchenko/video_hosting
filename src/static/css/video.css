@@ -71,7 +71,7 @@ html[dark] #home-container-skeleton {
   }
 }
 #home-page-skeleton .video-details {
-  padding-bottom: 40px;
+  padding-bottom: 15px;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
