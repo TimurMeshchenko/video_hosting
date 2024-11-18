@@ -2,10 +2,12 @@
 
 # Настройка mongodb
 
+docker run --name mongo -v ./database_backups:/database_backups -d -p 27017:27017 mongo
+docker exec -it mongo bash
 mongosh 
 use video_hosting
 db.createCollection("videos")
-
+exit
 cd mongodb_backup
 mongorestore --db=video_hosting .
 

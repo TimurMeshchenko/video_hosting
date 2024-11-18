@@ -50,9 +50,49 @@
             background-color: #0e0e0e !important
         }
     </style>
+    <style>
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+    
+        .authorization-input {
+            width: 85%;
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    </style>
 </head>
 
 <body dir="ltr">
+    <div class="popup-overlay">
+        <div class="authorization" style="display: flex;
+                    flex-direction: column;
+                    background-color: white;
+                    border-radius: 10px;
+                    width: 500px;
+                    height: 300px;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 16px;">
+            <p style="margin-bottom: 10px;">Log in</p>
+            <input class="authorization-input" placeholder="Username">
+            <input class="authorization-input" placeholder="Password" style="margin-top: 10px;">
+            <button
+                style="padding: 10px; border: 1px solid black; margin-top: 10px;width: 85%; background-color: black; color: white; border-radius: 10px;">Log
+                in</button>
+            <button style="color: #0000be; margin-top: 10px;">Register</button>
+        </div>
+    </div>
     <header class="header j-header header--custom-bg">
         <div class="header__container">
             <div class="header__bottom">
@@ -83,7 +123,7 @@
                             style="background-color: black;border: 1px solid #282828;color: white" ;>
                     </div>
                 </div>
-                <svg viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                <svg class="profile-icon" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"
                     style="height: 30px;padding-right: 10px;padding-left: 10px;cursor: pointer;">
                     <g id="SVGRepo_iconCarrier">
@@ -257,6 +297,20 @@
             </div>
         </div>
     </div>
+    <script>
+        const profile_icon = document.querySelector('.profile-icon')
+        const popup_overlay = document.querySelector('.popup-overlay')
+
+        profile_icon.addEventListener('click', (event) => {
+            popup_overlay.style.display = 'flex'
+        })
+
+        popup_overlay.addEventListener('click', (event) => {
+            if (event.target == popup_overlay) {
+                popup_overlay.style.display = 'none'
+            }
+        })
+    </script>    
 </body>
 
 </html>
