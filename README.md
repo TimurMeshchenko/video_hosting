@@ -9,7 +9,7 @@ use video_hosting
 db.createCollection("videos")
 exit
 cd mongodb_backup
-mongorestore --db=video_hosting .
+mongorevideo_hosting --db=video_hosting .
 
 # Запуск
 
@@ -28,3 +28,17 @@ db.videos.insertOne({
 })
 
 db.videos.deleteOne({"title": "minecraft"})
+
+# Webpack optimization
+
+Убрать .git и media, чтобы запустить
+
+docker build -f Dockerfile.webpack -t video_hosting_webpack .
+docker run --name video_hosting_webpack_container -p 8080:8080 -v ./optimized:/app/optimized -v ./webpack.config.js:/app/webpack.config.js -d video_hosting_webpack
+sudo docker exec -it video_hosting_webpack_container bash
+
+npx webpack
+
+sudo docker stop video_hosting_webpack_container
+sudo docker rm video_hosting_webpack_container
+sudo docker rmi video_hosting_webpack

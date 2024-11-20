@@ -1,0 +1,22 @@
+# Use an official Node.js runtime as a parent image
+FROM node
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the rest of the application code
+COPY package.json webpack.config.js ./
+COPY src/static ./src/static
+COPY templates ./templates
+
+# Install dependencies
+RUN npm install
+
+# Build the application
+RUN npm run build
+
+# Expose port (if you're running a development server)
+EXPOSE 8080
+
+# Command to run when the container starts
+CMD ["npm", "start"]
