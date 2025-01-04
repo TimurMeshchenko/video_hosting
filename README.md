@@ -9,7 +9,7 @@ use video_hosting
 db.createCollection("videos")
 exit
 cd mongodb_backup
-mongorevideo_hosting --db=video_hosting .
+mongorestore --db=video_hosting .
 
 # Запуск
 
@@ -18,6 +18,8 @@ cd src
 poetry run python -m uvicorn main:app --reload --port 8004
 poetry run ./run_with_reload.sh
 
+Прод:
+poetry run python -m uvicorn main:app --port 8004
 
 # mongosh комманды
 
